@@ -7,6 +7,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -22,16 +23,18 @@ public class App {
      */
 
     private static final String sample_filename = "/sample.json";
-    private static final String sample_filenamelist = "/sample.json";
+    private static final String sample_filenamelist = "/samplelist.json";
+    private static Gson gson = new Gson();
 
     public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException {
-        String text = getSample(sample_filename);
-        Gson gson = new Gson();
-        JsonObject Sample = gson.fromJson(text, JsonObject.class);
-        Document doc = getNewDocument(Sample);
-        System.out.printf("this is set id %s\n", doc.getId());
-        System.out.printf("this is set name %s\n", doc.getName());
+        String text = getSample(sample_filenamelist);
+        JsonArray Sample = gson.fromJson(text, JsonArray.class);
+        for(JsonElement obj : Sample) {
+            Document doc = getNewDocument(obj.getAsJsonObject());
+            System.out.printf("this is set id %s\n", doc.getId());
+            System.out.printf("this is set name %s\n", doc.getName());
+        }
     }
 
     private static Document getNewDocument(JsonObject Sample)
