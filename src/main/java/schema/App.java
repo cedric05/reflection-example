@@ -28,13 +28,30 @@ public class App {
 
     public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException {
+        documentExample();
+    }
+
+    private static void documentExample()
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        String text = getSample(sample_filename);
+        JsonObject Sample = gson.fromJson(text, JsonObject.class);
+        Document doc = getNewDocument(Sample.getAsJsonObject());
+        printExtracted(doc);
+    }
+
+    private static void documentListExample()
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         String text = getSample(sample_filenamelist);
         JsonArray Sample = gson.fromJson(text, JsonArray.class);
-        for(JsonElement obj : Sample) {
+        for (JsonElement obj : Sample) {
             Document doc = getNewDocument(obj.getAsJsonObject());
-            System.out.printf("this is set id %s\n", doc.getId());
-            System.out.printf("this is set name %s\n", doc.getName());
+            printExtracted(doc);
         }
+    }
+
+    private static void printExtracted(Document doc) {
+        System.out.printf("doc id: %s\n", doc.getId());
+        System.out.printf("doc name: %s\n", doc.getName());
     }
 
     private static Document getNewDocument(JsonObject Sample)
