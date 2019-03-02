@@ -1,0 +1,12 @@
+{
+    "id": {
+        "destination": "setId2",
+        "source": "getId",
+        "type": "String"
+    },
+    "name": {
+        "destination": "setName2",
+        "source": "getName",
+        "type": "String"
+    }
+}

@@ -1,5 +1,6 @@
 package schema;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map.Entry;
@@ -13,6 +14,7 @@ import com.google.gson.JsonObject;
 
 import schema.pojo.DocWithByteArray;
 import schema.pojo.Document;
+import schema.pojo.Document2;
 
 /**
  * Hello world!
@@ -31,13 +33,35 @@ public class App {
     private static final String sample_filename = "/sample.json";
     private static final String sample_filenamelist = "/samplelist.json";
     private static final String arraydoc_filename = "/array.json";
+    private static final String DOC_DOC2_SCHEMA_JSON = "/doc-doc2-schema.json";
 
     private static Gson gson = new Gson();
 
     public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException {
-        DocWithByteArray docArray = getDocArray();
-        docArrayPrint(docArray);
+        Document doc = new Document();
+        doc.setId("id2");
+        doc.setName("name2");
+        Field[] declaredFields = Document.class.getDeclaredFields();
+        String schemaJsonString = getSample(DOC_DOC2_SCHEMA_JSON);
+        JsonObject SchemaJson = gson.fromJson(schemaJsonString, JsonObject.class);
+        Document2 doc2 = new Document2();
+        for (Field field : declaredFields) {
+            String name = field.getName();
+            JsonElement jsonElement = SchemaJson.get(name);
+            if (!jsonElement.isJsonNull()) {
+                JsonObject FieldDescriptor = jsonElement.getAsJsonObject();
+                String destinationFieldName = FieldDescriptor.get("destination").getAsString();
+                String SourceMethodName = FieldDescriptor.get("source").getAsString();
+                Method setMethod = Document2.class.getMethod(destinationFieldName, String.class);
+                Method getMethod = Document.class.getMethod(SourceMethodName);
+                setMethod.invoke(doc2, getMethod.invoke(doc));
+            } else {
+                System.out.printf("coudln't find translation %s", name);
+            }
+        }
+        System.out.printf("translated doc2 id %s\n",doc2.getId2());
+        System.out.printf("translated doc2 name %s\n",doc2.getName2());
 
     }
 
@@ -59,6 +83,7 @@ public class App {
         return doc;
     }
 
+    @SuppressWarnings(UNUSED)
     private static void docArrayPrint(DocWithByteArray doc) {
         String[] id = doc.getId();
         System.out.printf("doc array ids: %s %s", id[0], id[1]);
