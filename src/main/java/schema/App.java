@@ -11,6 +11,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import schema.pojo.DocWithByteArray;
 import schema.pojo.Document;
 
 /**
@@ -22,15 +23,48 @@ public class App {
      *
      */
 
+    private static final String UNUSED = "unused";
+    /**
+     *
+     */
+
     private static final String sample_filename = "/sample.json";
     private static final String sample_filenamelist = "/samplelist.json";
+    private static final String arraydoc_filename = "/array.json";
+
     private static Gson gson = new Gson();
 
     public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException {
-        documentExample();
+        DocWithByteArray docArray = getDocArray();
+        docArrayPrint(docArray);
+
     }
 
+    @SuppressWarnings(UNUSED)
+    private static DocWithByteArray getDocArray()
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        String sample = getSample(arraydoc_filename);
+        JsonObject arrayjsonstring = gson.fromJson(sample, JsonObject.class);
+        Method setId = DocWithByteArray.class.getMethod("setId", String[].class);
+        DocWithByteArray doc = new DocWithByteArray();
+        JsonArray asJsonArray = arrayjsonstring.get("id").getAsJsonArray();
+        String[] array = new String[asJsonArray.size()];
+        int count = 0;
+        for (JsonElement ele : asJsonArray) {
+            array[count] = ele.getAsString();
+            count++;
+        }
+        setId.invoke(doc, new Object[] { array });
+        return doc;
+    }
+
+    private static void docArrayPrint(DocWithByteArray doc) {
+        String[] id = doc.getId();
+        System.out.printf("doc array ids: %s %s", id[0], id[1]);
+    }
+
+    @SuppressWarnings(UNUSED)
     private static void documentExample()
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         String text = getSample(sample_filename);
@@ -39,6 +73,7 @@ public class App {
         printExtracted(doc);
     }
 
+    @SuppressWarnings(UNUSED)
     private static void documentListExample()
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         String text = getSample(sample_filenamelist);
