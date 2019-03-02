@@ -1,10 +1,12 @@
 package schema;
 
+import static schema.utils.getSample;
+import static schema.utils.printDoc2;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map.Entry;
-import java.util.Scanner;
 import java.util.Set;
 
 import com.google.gson.Gson;
@@ -47,6 +49,7 @@ public class App {
 
     }
 
+    @SuppressWarnings(UNUSED)
     private static Document2 getTranslatedDoc2(Document doc)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Field[] declaredFields = Document.class.getDeclaredFields();
@@ -68,11 +71,6 @@ public class App {
             }
         }
         return doc2;
-    }
-
-    private static void printDoc2(Document2 doc2) {
-        System.out.printf("translated doc2 id %s\n", doc2.getId2());
-        System.out.printf("translated doc2 name %s\n", doc2.getName2());
     }
 
     @SuppressWarnings(UNUSED)
@@ -146,10 +144,4 @@ public class App {
         return doc;
     }
 
-    private static String getSample(String sample_filename) {
-        Scanner scanner = new Scanner(App.class.getResourceAsStream(sample_filename), "UTF-8");
-        String text = scanner.useDelimiter("\\A").next();
-        scanner.close();
-        return text;
-    }
 }
