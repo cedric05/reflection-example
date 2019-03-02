@@ -42,6 +42,13 @@ public class App {
         Document doc = new Document();
         doc.setId("id2");
         doc.setName("name2");
+        Document2 doc2 = getTranslatedDoc2(doc);
+        printDoc2(doc2);
+
+    }
+
+    private static Document2 getTranslatedDoc2(Document doc)
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Field[] declaredFields = Document.class.getDeclaredFields();
         String schemaJsonString = getSample(DOC_DOC2_SCHEMA_JSON);
         JsonObject SchemaJson = gson.fromJson(schemaJsonString, JsonObject.class);
@@ -60,9 +67,12 @@ public class App {
                 System.out.printf("coudln't find translation %s", name);
             }
         }
-        System.out.printf("translated doc2 id %s\n",doc2.getId2());
-        System.out.printf("translated doc2 name %s\n",doc2.getName2());
+        return doc2;
+    }
 
+    private static void printDoc2(Document2 doc2) {
+        System.out.printf("translated doc2 id %s\n", doc2.getId2());
+        System.out.printf("translated doc2 name %s\n", doc2.getName2());
     }
 
     @SuppressWarnings(UNUSED)
