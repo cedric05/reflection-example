@@ -67,7 +67,7 @@ public class GenericTranslator {
         return newdoc;
     }
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings( "rawtypes" )
     public static <Source, Dest> HashMap<Method, Method> getMethodMap(String schemaFilename, Class<Source> source,
             Class<Dest> dest) throws NoSuchMethodException {
         String schema = getSample(schemaFilename);
@@ -89,9 +89,9 @@ public class GenericTranslator {
         return MethodMap;
     }
 
-    @SuppressWarnings("unsed")
-    private static <Dest> Method getDestMethod(Class<Dest> dest, JsonObject value, Class typeClass)
-            throws NoSuchMethodException, SecurityException {
+    @SuppressWarnings( "deprecation" )
+    private static <Dest> Method getDestMethod(Class<Dest> dest, JsonObject value,
+            @SuppressWarnings("rawtypes") Class typeClass) throws NoSuchMethodException, SecurityException {
         JsonElement destJsonElement = value.get(DESTINATION);
         String destString;
         if (destJsonElement != null) {
@@ -104,6 +104,7 @@ public class GenericTranslator {
         return destMethod;
     }
 
+    @SuppressWarnings( "deprecation" )
     private static <Source> Method getSourceMethod(Class<Source> source, String field, JsonObject value)
             throws NoSuchMethodException {
         JsonElement sourceJsonElement = value.get(SOURCE);
@@ -116,7 +117,7 @@ public class GenericTranslator {
         Method sourceMethod = source.getMethod(sourceString);
         return sourceMethod;
     }
-
+    @SuppressWarnings("rawtypes")
     private static Class getClass(String type) {
         Class typeClass;
         switch (type) {
