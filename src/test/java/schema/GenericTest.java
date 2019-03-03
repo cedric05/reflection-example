@@ -1,16 +1,11 @@
 package schema;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import org.junit.Test;
 
@@ -23,8 +18,8 @@ import schema.generictest_docs.doc2;
  * Unit test for simple App.
  */
 public class GenericTest {
-    public void testDoc1Doc2(String schemaFilename) throws NoSuchMethodException, FileNotFoundException, IOException, IllegalAccessException,
-            IllegalArgumentException, InvocationTargetException {
+    public void testDoc1Doc2(String schemaFilename) throws NoSuchMethodException, FileNotFoundException, IOException,
+            IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         String Schema = getSchemaByFile(schemaFilename);
         GenericTranslator<doc1, doc2> translator = new GenericTranslator<>(Schema, doc1.class, doc2.class);
@@ -45,7 +40,7 @@ public class GenericTest {
         assertEquals(d2.getFull_name(), name);
     }
 
-    @Test 
+    @Test
     public void testDoc1Schema1() throws NoSuchMethodException, FileNotFoundException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException, IOException {
         testDoc1Doc2("/doct1-doct2-schema.json");
