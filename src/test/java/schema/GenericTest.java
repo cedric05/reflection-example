@@ -23,14 +23,6 @@ import schema.generictest_docs.doc2;
  * Unit test for simple App.
  */
 public class GenericTest {
-    /**
-     * Rigorous Test :-)
-     */
-    @Test
-    public void shouldAnswerWithTrue() {
-        assertTrue(true);
-
-    }
 
     @Test
     public void testGeneric() throws NoSuchMethodException, FileNotFoundException, IOException, IllegalAccessException,
