@@ -1,12 +1,10 @@
 {
     "id": {
-        "destination": "setId2",
-        "source": "getId",
+        "destination": "id2",
         "type": "String"
     },
     "name": {
-        "destination": "setName2",
-        "source": "getName",
+        "destination": "name2",
         "type": "String"
     }
 }

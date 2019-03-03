@@ -12,10 +12,27 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import org.apache.commons.lang.StringUtils;
+
 import schema.pojo.Document;
 import schema.pojo.Document2;
 
 public class GenericTranslator {
+    /**
+     *
+     */
+
+    private static final String DESTINATION_METHOD = "destinationMethod";
+    /**
+     *
+     */
+
+    private static final String SOURCE = "source";
+    /**
+     *
+     */
+
+    private static final String DESTINATION = "destination";
     /**
      *
      */
@@ -57,16 +74,67 @@ public class GenericTranslator {
         JsonObject schemaJson = gson.fromJson(schema, JsonObject.class);
         HashMap<Method, Method> MethodMap = new HashMap<Method, Method>();
         for (Entry<String, JsonElement> e : schemaJson.entrySet()) {
+            String field = e.getKey();
             JsonObject value = e.getValue().getAsJsonObject();
 
-            String sourceString = value.get("source").getAsString();
-            Method sourceMethod = source.getMethod(sourceString);
+            String type = value.get("type").getAsString();
+            Class typeClass = getClass(type);
 
-            String destString = value.get("destination").getAsString();
-            Method destMethod = dest.getMethod(destString, String.class);
+            Method sourceMethod = getSourceMethod(source, field, value);
+
+            Method destMethod = getDestMethod(dest, value, typeClass);
 
             MethodMap.put(destMethod, sourceMethod);
         }
         return MethodMap;
+    }
+
+    @SuppressWarnings("unsed")
+    private static <Dest> Method getDestMethod(Class<Dest> dest, JsonObject value, Class typeClass)
+            throws NoSuchMethodException, SecurityException {
+        JsonElement destJsonElement = value.get(DESTINATION);
+        String destString;
+        if (destJsonElement != null) {
+            destString = "set" + StringUtils.capitalise(destJsonElement.getAsString());
+        } else {
+            JsonObject destMethodName = value.get(DESTINATION_METHOD).getAsJsonObject();
+            destString = destMethodName.getAsString();
+        }
+        Method destMethod = dest.getMethod(destString, typeClass);
+        return destMethod;
+    }
+
+    private static <Source> Method getSourceMethod(Class<Source> source, String field, JsonObject value)
+            throws NoSuchMethodException {
+        JsonElement sourceJsonElement = value.get(SOURCE);
+        String sourceString;
+        if (sourceJsonElement == null) {
+            sourceString = "get" + StringUtils.capitalise(field);
+        } else {
+            sourceString = "get" + sourceJsonElement.getAsString();
+        }
+        Method sourceMethod = source.getMethod(sourceString);
+        return sourceMethod;
+    }
+
+    private static Class getClass(String type) {
+        Class typeClass;
+        switch (type) {
+        case "int":
+            typeClass = int.class;
+            break;
+        // case "int[]":
+        // typeClass = int[].class;
+        // break;
+        case "Integer":
+            typeClass = Integer.class;
+            break;
+        case "String":
+            typeClass = String.class;
+            break;
+        default:
+            typeClass = String.class;
+        }
+        return typeClass;
     }
 }
