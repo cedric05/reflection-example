@@ -59,9 +59,7 @@ public class GenericTest {
             IllegalAccessException, InvocationTargetException {
         String filename = "/ara1-ara2-schema.json";
         String schema = getSchemaByFile(filename);
-        Class<ara1> source = ara1.class;
-        Class<ara2> dest = ara2.class;
-        GenericTranslator<ara1, ara2> translator = new GenericTranslator<ara1, ara2>(schema, source, dest);
+        GenericTranslator<ara1, ara2> translator = new GenericTranslator<ara1, ara2>(schema, ara1.class, ara2.class);
 
         int a[] = { 1, 2, 3 };
         ara1 doc = new ara1();
