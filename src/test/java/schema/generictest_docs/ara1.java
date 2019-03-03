@@ -1,5 +1,6 @@
 package schema.generictest_docs;
-public class ara1{
+
+public class ara1 {
     private int[] a;
 
     /**
@@ -15,6 +16,5 @@ public class ara1{
     public void setA(int[] a) {
         this.a = a;
     }
-
 
 }

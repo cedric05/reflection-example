@@ -7,8 +7,6 @@ import java.io.IOException;
 
 import org.apache.commons.io.IOUtils;
 
-
-
 public class utils {
     public static String getSample(String resourceFileName) throws IOException {
         String absoluteFileName = getResouceFullFileName(resourceFileName);

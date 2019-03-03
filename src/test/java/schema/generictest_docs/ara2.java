@@ -1,6 +1,6 @@
 package schema.generictest_docs;
 
-public class ara2{
+public class ara2 {
     private int b[];
 
     /**

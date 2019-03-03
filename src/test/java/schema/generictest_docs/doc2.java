@@ -1,6 +1,6 @@
 package schema.generictest_docs;
 
-public class doc2{
+public class doc2 {
     private int rollno;
     private String full_name;
     private String content;
