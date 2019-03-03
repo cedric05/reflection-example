@@ -1,0 +1,7 @@
+{
+    "a":{
+        "source": "a",
+        "destination": "b",
+        "type": "int"
+    }
+}

@@ -79,11 +79,14 @@ public class GenericTranslator {
             JsonObject value = e.getValue().getAsJsonObject();
 
             String type = value.get("type").getAsString();
+            @SuppressWarnings("unused")
             Class typeClass = getClass(type);
 
             Method sourceMethod = getSourceMethod(source, field, value);
 
-            Method destMethod = getDestMethod(dest, value, typeClass);
+            Class<?> returnType = sourceMethod.getReturnType();
+
+            Method destMethod = getDestMethod(dest, value, returnType);
 
             MethodMap.put(destMethod, sourceMethod);
         }
@@ -113,7 +116,7 @@ public class GenericTranslator {
         if (sourceJsonElement == null) {
             sourceString = "get" + StringUtils.capitalise(field);
         } else {
-            sourceString = "get" + sourceJsonElement.getAsString();
+            sourceString = "get" +StringUtils.capitalise( sourceJsonElement.getAsString());
         }
         Method sourceMethod = source.getMethod(sourceString);
         return sourceMethod;

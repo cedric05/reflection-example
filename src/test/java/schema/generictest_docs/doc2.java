@@ -1,4 +1,4 @@
-package schema;
+package schema.generictest_docs;
 
 public class doc2{
     private int rollno;
