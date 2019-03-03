@@ -38,9 +38,8 @@ public class GenericTest {
 
         String schemaFilename = "/doct1-doct2-schema.json";
         String Schema = getSchemaByFile(schemaFilename);
-        HashMap<Method, Method> methodMap = GenericTranslator.getMethodMap(Schema, doc1.class, doc2.class);
-        assertEquals(3, methodMap.size());
-
+        GenericTranslator translator = new GenericTranslator<doc1, doc2>();
+        translator.initialize(Schema, doc1.class, doc2.class);
         String name = "shiva prasanth";
         String description = "sample descripition";
         int id = 1;
@@ -52,25 +51,10 @@ public class GenericTest {
         d.setId(id);
 
         doc2 d2 = new doc2();
-        runMethodMap(methodMap, d, d2);
+        translator.translate(d, d2);
         assertEquals(d2.getRollno(), id);
         assertEquals(d2.getContent(), description);
         assertEquals(d2.getFull_name(), name);
-
-        // String sample = utils.getSample(schemaFilename);
-        // System.out.printf("sample: %s\n", sample);
-        // GenericTranslator.getMethodMap(schemaFilename, doc1.class, doc2.class);
-
-    }
-
-    private <doc1, doc2> void runMethodMap(HashMap<Method, Method> methodMap, doc1 d, doc2 d2)
-            throws IllegalAccessException, InvocationTargetException {
-        Set<Entry<Method, Method>> entrySet = methodMap.entrySet();
-        for (Entry<Method, Method> e : entrySet) {
-            Method sMethod = e.getKey();
-            Method gMethod = e.getValue();
-            sMethod.invoke(d2, gMethod.invoke(d));
-        }
     }
 
     private String getSchemaByFile(String schemaFilename) throws FileNotFoundException, IOException {
@@ -86,8 +70,8 @@ public class GenericTest {
         String schema = getSchemaByFile(filename);
         Class<ara1> source = ara1.class;
         Class<ara2> dest = ara2.class;
-        HashMap<Method, Method> methodMap = GenericTranslator.getMethodMap(schema, source, dest);
-        assertEquals(methodMap.size(), 1);
+        GenericTranslator translator = new GenericTranslator();
+        translator.initialize(schema, source, dest);
 
         int a[] = { 1, 2, 3 };
         ara1 doc = new ara1();
@@ -95,7 +79,7 @@ public class GenericTest {
 
         ara2 doc2 = new ara2();
 
-        runMethodMap(methodMap, doc, doc2);
+        translator.translate(doc, doc2);
 
         int[] b = doc2.getB();
         assertEquals(b, a);
