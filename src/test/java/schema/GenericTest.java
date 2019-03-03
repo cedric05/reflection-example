@@ -54,10 +54,8 @@ public class GenericTest {
         return Schema;
     }
 
-    @Test
-    public void testwithAarray() throws FileNotFoundException, IOException, NoSuchMethodException,
+    public void runArrayTest(String filename) throws FileNotFoundException, IOException, NoSuchMethodException,
             IllegalAccessException, InvocationTargetException {
-        String filename = "/ara1-ara2-schema.json";
         String schema = getSchemaByFile(filename);
         GenericTranslator<ara1, ara2> translator = new GenericTranslator<ara1, ara2>(schema, ara1.class, ara2.class);
 
@@ -71,6 +69,21 @@ public class GenericTest {
 
         int[] b = doc2.getB();
         assertEquals(b, a);
+
+    }
+
+    @Test
+    public void testWithMoregeneric() throws FileNotFoundException, IOException, NoSuchMethodException,
+            IllegalAccessException, InvocationTargetException {
+        String filename = "/ara1-ara2-schema-version2.json";
+        runArrayTest(filename);
+    }
+
+    @Test
+    public void testwithmoreSpecific() throws FileNotFoundException, NoSuchMethodException, IllegalAccessException,
+            InvocationTargetException, IOException {
+        String filename = "/ara1-ara2-schema.json";
+        runArrayTest(filename);
 
     }
 }
