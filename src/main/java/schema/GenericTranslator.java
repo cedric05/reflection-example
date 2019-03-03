@@ -70,8 +70,8 @@ public class GenericTranslator {
         String destMethodName;
 
         //if descriptor is string itself, then value will be field name
-        String valueString = destDescriptor.getAsString();
-        if (valueString != null) {
+        if (!destDescriptor.isJsonObject()) {
+            String valueString = destDescriptor.getAsString();
             destMethodName = "set" + StringUtils.capitalise(valueString);
         } else {
             // in else case descriptor should contain destination or destinantion method name
