@@ -3,6 +3,7 @@ package schema;
 import static schema.utils.getSample;
 import static schema.utils.printDoc2;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -45,7 +46,7 @@ public class GenericTranslator {
     }
 
     public static void main(String args[]) throws NoSuchMethodException, SecurityException, IllegalAccessException,
-            IllegalArgumentException, InvocationTargetException {
+            IllegalArgumentException, InvocationTargetException, IOException {
 
         Document doc = new Document();
         doc.setId("1");
@@ -56,8 +57,9 @@ public class GenericTranslator {
     }
 
     private static Document2 getDoc2BySchema(Document doc)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        HashMap<Method, Method> methodMap = getMethodMap(DOC_DOC2_SCHEMA_JSON, Document.class, Document2.class);
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
+        String schema = getSample(DOC_DOC2_SCHEMA_JSON);
+        HashMap<Method, Method> methodMap = getMethodMap(schema, Document.class, Document2.class);
         Document2 newdoc = new Document2();
         for (Entry<Method, Method> map : methodMap.entrySet()) {
             Method destMethod = map.getKey();
@@ -67,10 +69,9 @@ public class GenericTranslator {
         return newdoc;
     }
 
-    @SuppressWarnings( "rawtypes" )
-    public static <Source, Dest> HashMap<Method, Method> getMethodMap(String schemaFilename, Class<Source> source,
-            Class<Dest> dest) throws NoSuchMethodException {
-        String schema = getSample(schemaFilename);
+    @SuppressWarnings("rawtypes")
+    public static <Source, Dest> HashMap<Method, Method> getMethodMap(String schema, Class<Source> source,
+            Class<Dest> dest) throws NoSuchMethodException, IOException {
         JsonObject schemaJson = gson.fromJson(schema, JsonObject.class);
         HashMap<Method, Method> MethodMap = new HashMap<Method, Method>();
         for (Entry<String, JsonElement> e : schemaJson.entrySet()) {

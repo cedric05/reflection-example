@@ -1,4 +1,4 @@
-package schema-driven;
+package schema;
 
 import static org.junit.Assert.assertTrue;
 

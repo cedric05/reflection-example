@@ -1,0 +1,14 @@
+{
+    "id":{
+        "type":"int",
+        "destination": "rollno"
+    },
+    "name":{
+        "type": "String",
+        "destination": "full_name"
+    },
+    "description":{
+        "type": "String",
+        "destination": "content"
+    }
+}

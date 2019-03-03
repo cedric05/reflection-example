@@ -3,6 +3,7 @@ package schema;
 import static schema.utils.getSample;
 import static schema.utils.printDoc2;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -40,7 +41,7 @@ public class App {
     private static Gson gson = new Gson();
 
     public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException,
-            IllegalArgumentException, InvocationTargetException {
+            IllegalArgumentException, InvocationTargetException, IOException {
         Document doc = new Document();
         doc.setId("id2");
         doc.setName("name2");
@@ -49,9 +50,8 @@ public class App {
 
     }
 
-    @SuppressWarnings(UNUSED)
     private static Document2 getTranslatedDoc2(Document doc)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
         Field[] declaredFields = Document.class.getDeclaredFields();
         String schemaJsonString = getSample(DOC_DOC2_SCHEMA_JSON);
         JsonObject SchemaJson = gson.fromJson(schemaJsonString, JsonObject.class);
@@ -75,7 +75,7 @@ public class App {
 
     @SuppressWarnings(UNUSED)
     private static DocWithByteArray getDocArray()
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
         String sample = getSample(arraydoc_filename);
         JsonObject arrayjsonstring = gson.fromJson(sample, JsonObject.class);
         Method setId = DocWithByteArray.class.getMethod("setId", String[].class);
@@ -99,7 +99,7 @@ public class App {
 
     @SuppressWarnings(UNUSED)
     private static void documentExample()
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
         String text = getSample(sample_filename);
         JsonObject Sample = gson.fromJson(text, JsonObject.class);
         Document doc = getNewDocument(Sample.getAsJsonObject());
@@ -108,7 +108,7 @@ public class App {
 
     @SuppressWarnings(UNUSED)
     private static void documentListExample()
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, IOException {
         String text = getSample(sample_filenamelist);
         JsonArray Sample = gson.fromJson(text, JsonArray.class);
         for (JsonElement obj : Sample) {
