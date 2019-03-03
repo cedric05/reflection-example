@@ -1,10 +1,6 @@
 package schema;
 
-import static schema.utils.getSample;
-import static schema.utils.printDoc2;
-
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -14,9 +10,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.apache.commons.lang.StringUtils;
-
-import schema.pojo.Document;
-import schema.pojo.Document2;
 
 public class GenericTranslator {
     /**
@@ -69,12 +62,13 @@ public class GenericTranslator {
             @SuppressWarnings("rawtypes") Class typeClass) throws NoSuchMethodException, SecurityException {
         String destMethodName;
 
-        //if descriptor is string itself, then value will be field name
+        // if descriptor is string itself, then value will be field name
         if (!destDescriptor.isJsonObject()) {
             String valueString = destDescriptor.getAsString();
             destMethodName = "set" + StringUtils.capitalise(valueString);
         } else {
-            // in else case descriptor should contain destination or destinantion method name
+            // in else case descriptor should contain destination or destinantion method
+            // name
             JsonElement destJsonElement = destDescriptor.get(DESTINATION);
             if (destJsonElement != null) {
                 // destination is defined

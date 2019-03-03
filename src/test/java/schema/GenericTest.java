@@ -87,10 +87,9 @@ public class GenericTest {
         Class<ara1> source = ara1.class;
         Class<ara2> dest = ara2.class;
         HashMap<Method, Method> methodMap = GenericTranslator.getMethodMap(schema, source, dest);
-        assertEquals(methodMap.size(),1);
+        assertEquals(methodMap.size(), 1);
 
-
-        int a[] = {1,2,3};
+        int a[] = { 1, 2, 3 };
         ara1 doc = new ara1();
         doc.setA(a);
 
@@ -100,9 +99,6 @@ public class GenericTest {
 
         int[] b = doc2.getB();
         assertEquals(b, a);
-        
 
-        // for()
-        
     }
 }
