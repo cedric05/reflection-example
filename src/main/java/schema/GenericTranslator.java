@@ -36,7 +36,7 @@ public class GenericTranslator<Source, Dest> {
     private Class<Dest> dest;
 
 
-    public void initialize(String schema, Class<Source> source, Class<Dest> dest)
+    public GenericTranslator(String schema, Class<Source> source, Class<Dest> dest)
             throws NoSuchMethodException, IOException {
         this.source = source;
         this.dest = dest;

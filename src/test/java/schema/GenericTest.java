@@ -38,8 +38,7 @@ public class GenericTest {
 
         String schemaFilename = "/doct1-doct2-schema.json";
         String Schema = getSchemaByFile(schemaFilename);
-        GenericTranslator translator = new GenericTranslator<doc1, doc2>();
-        translator.initialize(Schema, doc1.class, doc2.class);
+        GenericTranslator<doc1, doc2> translator = new GenericTranslator<>(Schema, doc1.class, doc2.class);
         String name = "shiva prasanth";
         String description = "sample descripition";
         int id = 1;
@@ -70,8 +69,7 @@ public class GenericTest {
         String schema = getSchemaByFile(filename);
         Class<ara1> source = ara1.class;
         Class<ara2> dest = ara2.class;
-        GenericTranslator translator = new GenericTranslator();
-        translator.initialize(schema, source, dest);
+        GenericTranslator<ara1, ara2> translator = new GenericTranslator<ara1, ara2>(schema, source, dest);
 
         int a[] = { 1, 2, 3 };
         ara1 doc = new ara1();
