@@ -21,7 +21,7 @@ public class utils {
     }
 
     public static String getResouceFullFileName(String sample) {
-        File file = new File(App.class.getResource(sample).getFile());
+        File file = new File(utils.class.getResource(sample).getFile());
         return file.getAbsolutePath();
     }
 
