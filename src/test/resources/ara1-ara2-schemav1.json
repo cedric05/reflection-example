@@ -1,9 +1,5 @@
 {
   "a": {
-<<<<<<< HEAD
     "destinationMethod": "setB"
-=======
-    "destinationMethod": "getB"
->>>>>>> 34e193d52fbfdde4a6158b099bb2069876afac6a
   }
 }
