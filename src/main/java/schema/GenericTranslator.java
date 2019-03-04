@@ -1,17 +1,15 @@
 package schema;
 
-import java.io.IOException;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import org.apache.commons.lang.StringUtils;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import org.apache.commons.lang.StringUtils;
 
 public class GenericTranslator<Source, Dest> {
     /**
@@ -36,7 +34,7 @@ public class GenericTranslator<Source, Dest> {
     private Class<Dest> dest;
 
     public GenericTranslator(String schema, Class<Source> source, Class<Dest> dest)
-            throws NoSuchMethodException, IOException {
+            throws NoSuchMethodException {
         this.source = source;
         this.dest = dest;
         JsonObject schemaJson = gson.fromJson(schema, JsonObject.class);
@@ -84,7 +82,7 @@ public class GenericTranslator<Source, Dest> {
                 destMethodName = "set" + StringUtils.capitalise(destJsonElement.getAsString());
             } else {
                 // destiantion is not defined, going with destination method name
-                destMethodName = descriptor.get(DESTINATION_METHOD).getAsJsonObject().getAsString();
+                destMethodName = descriptor.get(DESTINATION_METHOD).getAsString();
             }
         }
         Method destMethod = dest.getMethod(destMethodName, typeClass);

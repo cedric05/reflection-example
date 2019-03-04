@@ -1,24 +1,22 @@
 package schema;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-
 import org.junit.Test;
-
 import schema.generictest_docs.ara1;
 import schema.generictest_docs.ara2;
 import schema.generictest_docs.doc1;
 import schema.generictest_docs.doc2;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
+import static org.junit.Assert.assertEquals;
+
 /**
  * Unit test for simple App.
  */
 public class GenericTest {
-    public void testDoc1Doc2(String schemaFilename) throws NoSuchMethodException, FileNotFoundException, IOException,
+    public void testDoc1Doc2(String schemaFilename) throws NoSuchMethodException, IOException,
             IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         String Schema = getSchemaByFile(schemaFilename);
@@ -41,29 +39,29 @@ public class GenericTest {
     }
 
     @Test
-    public void testDoc1Schema1() throws NoSuchMethodException, FileNotFoundException, IllegalAccessException,
+    public void testDoc1Schema1() throws NoSuchMethodException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException, IOException {
         testDoc1Doc2("/doct1-doct2-schema.json");
     }
 
     @Test
-    public void testDoc1Doc2Schema2() throws NoSuchMethodException, FileNotFoundException, IllegalAccessException,
+    public void testDoc1Doc2Schema2() throws NoSuchMethodException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException, IOException {
         testDoc1Doc2("/doct1-doct2-schema2.json");
     }
 
-    private String getSchemaByFile(String schemaFilename) throws FileNotFoundException, IOException {
+    private String getSchemaByFile(String schemaFilename) throws IOException {
         File resource = new File(GenericTest.class.getResource(schemaFilename).getFile());
         String Schema = utils.getFileContents(resource.getAbsolutePath());
         return Schema;
     }
 
-    public void testArr1Arr2(String filename) throws FileNotFoundException, IOException, NoSuchMethodException,
+    public void testArr1Arr2(String filename) throws IOException, NoSuchMethodException,
             IllegalAccessException, InvocationTargetException {
         String schema = getSchemaByFile(filename);
         GenericTranslator<ara1, ara2> translator = new GenericTranslator<ara1, ara2>(schema, ara1.class, ara2.class);
 
-        int a[] = { 1, 2, 3 };
+        int[] a = {1, 2, 3};
         ara1 doc = new ara1();
         doc.setA(a);
 
@@ -77,16 +75,22 @@ public class GenericTest {
     }
 
     @Test
-    public void testWithMoregeneric() throws FileNotFoundException, IOException, NoSuchMethodException,
+    public void testWithMoregeneric() throws IOException, NoSuchMethodException,
             IllegalAccessException, InvocationTargetException {
         String filename = "/ara1-ara2-schema-version2.json";
         testArr1Arr2(filename);
     }
 
     @Test
-    public void testwithmoreSpecific() throws FileNotFoundException, NoSuchMethodException, IllegalAccessException,
+    public void testwithmoreSpecific() throws NoSuchMethodException, IllegalAccessException,
             InvocationTargetException, IOException {
         String filename = "/ara1-ara2-schema.json";
+        testArr1Arr2(filename);
+    }
+
+    @Test
+    public void testwithdestMethodDefined() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, IOException {
+        String filename = "/ara1-ara2-schemav1.json";
         testArr1Arr2(filename);
     }
 }
