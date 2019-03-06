@@ -1,6 +1,10 @@
 package schema;
 
 import org.junit.Test;
+
+import schema.Complex.Bus;
+import schema.Complex.Bus2;
+import schema.Complex.Tyre;
 import schema.generictest_docs.ara1;
 import schema.generictest_docs.ara2;
 import schema.generictest_docs.doc1;
@@ -17,7 +21,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class GenericTest {
     public void testDoc1Doc2(String schemaFilename) throws NoSuchMethodException, IOException,
-            IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+            IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchFieldException, InstantiationException {
 
         String Schema = getSchemaByFile(schemaFilename);
         GenericTranslator<doc1, doc2> translator = new GenericTranslator<>(Schema, doc1.class, doc2.class);
@@ -40,13 +44,13 @@ public class GenericTest {
 
     @Test
     public void testDoc1Schema1() throws NoSuchMethodException, IllegalAccessException,
-            IllegalArgumentException, InvocationTargetException, IOException {
+            IllegalArgumentException, InvocationTargetException, IOException, NoSuchFieldException, InstantiationException {
         testDoc1Doc2("/doct1-doct2-schema.json");
     }
 
     @Test
     public void testDoc1Doc2Schema2() throws NoSuchMethodException, IllegalAccessException,
-            IllegalArgumentException, InvocationTargetException, IOException {
+            IllegalArgumentException, InvocationTargetException, IOException, NoSuchFieldException, InstantiationException {
         testDoc1Doc2("/doct1-doct2-schema2.json");
     }
 
@@ -57,7 +61,7 @@ public class GenericTest {
     }
 
     public void testArr1Arr2(String filename) throws IOException, NoSuchMethodException,
-            IllegalAccessException, InvocationTargetException {
+            IllegalAccessException, InvocationTargetException, NoSuchFieldException, InstantiationException {
         String schema = getSchemaByFile(filename);
         GenericTranslator<ara1, ara2> translator = new GenericTranslator<ara1, ara2>(schema, ara1.class, ara2.class);
 
@@ -76,21 +80,43 @@ public class GenericTest {
 
     @Test
     public void testWithMoregeneric() throws IOException, NoSuchMethodException,
-            IllegalAccessException, InvocationTargetException {
+            IllegalAccessException, InvocationTargetException, NoSuchFieldException, InstantiationException {
         String filename = "/ara1-ara2-schema-version2.json";
         testArr1Arr2(filename);
     }
 
     @Test
     public void testwithmoreSpecific() throws NoSuchMethodException, IllegalAccessException,
-            InvocationTargetException, IOException {
+            InvocationTargetException, IOException, NoSuchFieldException, InstantiationException {
         String filename = "/ara1-ara2-schema.json";
         testArr1Arr2(filename);
     }
 
-    @Test
-    public void testwithdestMethodDefined() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, IOException {
+    // @Test
+    public void testwithdestMethodDefined() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, IOException, NoSuchFieldException, InstantiationException {
         String filename = "/ara1-ara2-schemav1.json";
         testArr1Arr2(filename);
+    }
+
+    @Test
+    public void testBus1Bus2() throws IOException, NoSuchMethodException, IllegalAccessException,
+            IllegalArgumentException, InvocationTargetException, SecurityException, NoSuchFieldException, InstantiationException {
+        String filename = "/bus-bus2-complex-schema.json";
+        String schema = getSchemaByFile(filename);
+        GenericTranslator translator = new GenericTranslator<Bus, Bus2>(schema, Bus.class, Bus2.class);
+        
+        Tyre tyre = new Tyre();
+        String name = "tyrename";
+        tyre.setName(name);
+        
+        Bus bus = new Bus();
+        bus.setTyre(tyre);
+        // Bus.class.getClass().getDeclaredMethod(name);
+
+        Bus2 modifiedBus = new Bus2();
+
+        translator.translate(bus, modifiedBus);
+        System.out.printf("tyre name %s", modifiedBus.getName());
+
     }
 }
