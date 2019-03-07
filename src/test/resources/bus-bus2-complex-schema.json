@@ -1,3 +1,4 @@
 {
-    "tyre.name":"name"
+    "tyre.name":"name",
+    "seatname": "seat.name"
 }

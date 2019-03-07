@@ -3,6 +3,16 @@ package schema.Complex;
 public class Bus{
     private Tyre tyre;
 
+    public String getSeatname() {
+        return seatname;
+    }
+
+    public void setSeatname(String seatname) {
+        this.seatname = seatname;
+    }
+
+    private String seatname;
+
     /**
      * @return the tyre
      */

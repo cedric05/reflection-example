@@ -94,7 +94,7 @@ public class GenericTranslator<Source, Dest> {
         // if descriptor is string itself, then value will be field name
         if (!destDescriptor.isJsonObject()) {
             String valueString = destDescriptor.getAsString();
-            destMethodName =  StringUtils.capitalise(valueString);
+            destMethodName =  valueString;
         } else {
             // in else case descriptor should contain destination or destinantion method
             // name
@@ -102,7 +102,7 @@ public class GenericTranslator<Source, Dest> {
             JsonElement destJsonElement = descriptor.get(DESTINATION);
             if (destJsonElement != null) {
                 // destination is defined
-                destMethodName = StringUtils.capitalise(destJsonElement.getAsString());
+                destMethodName = destJsonElement.getAsString();
             } else {
                 // destiantion is not defined, going with destination method name
                 destMethodName = descriptor.get(DESTINATION_METHOD).getAsString();
