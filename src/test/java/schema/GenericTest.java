@@ -107,16 +107,20 @@ public class GenericTest {
         
         Tyre tyre = new Tyre();
         String name = "tyrename";
+
         tyre.setName(name);
+        String seatname = "finolex";
         
         Bus bus = new Bus();
         bus.setTyre(tyre);
+        bus.setSeatname(seatname);
         // Bus.class.getClass().getDeclaredMethod(name);
 
         Bus2 modifiedBus = new Bus2();
 
         translator.translate(bus, modifiedBus);
-        System.out.printf("tyre name %s", modifiedBus.getName());
+        assertEquals(name, modifiedBus.getName());
+        assertEquals(seatname, modifiedBus.getSeat().getName());
 
     }
 }

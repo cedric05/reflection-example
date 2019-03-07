@@ -20,7 +20,7 @@ public class SetterImpl<Dest> {
         Class finalClass = DestClass;
         methods = new ArrayList<Method>();
         for (String subName : names) {
-            String getterName = getGetterName(name);
+            String getterName = getGetterName(subName);
             Method getterMethod = finalClass.getMethod(getterName);
             Method method = finalClass.getMethod(getSetterName(subName), getterMethod.getReturnType());
             methods.add(method);
