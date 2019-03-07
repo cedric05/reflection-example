@@ -92,7 +92,7 @@ public class GenericTest {
         testArr1Arr2(filename);
     }
 
-    // @Test
+    @Test
     public void testwithdestMethodDefined() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, IOException, NoSuchFieldException, InstantiationException {
         String filename = "/ara1-ara2-schemav1.json";
         testArr1Arr2(filename);
