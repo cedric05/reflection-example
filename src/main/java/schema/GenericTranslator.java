@@ -6,10 +6,8 @@ import com.google.gson.JsonObject;
 import org.apache.commons.lang.StringUtils;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.regex.Pattern;
 import java.util.Set;
 
 public class GenericTranslator<Source, Dest> {
@@ -30,7 +28,7 @@ public class GenericTranslator<Source, Dest> {
     private static final String DESTINATION = "destination";
 
     private static Gson gson = new Gson();
-    private HashMap<SetterImpl, GetterImpl> MethodMap;
+    private HashMap<SetterImpl<Dest>, GetterImpl<Source>> MethodMap;
     private Class<Source> source;
     private Class<Dest> dest;
 
@@ -39,16 +37,16 @@ public class GenericTranslator<Source, Dest> {
         this.source = source;
         this.dest = dest;
         JsonObject schemaJson = gson.fromJson(schema, JsonObject.class);
-        MethodMap = new HashMap<SetterImpl, GetterImpl>();
+        MethodMap = new HashMap<SetterImpl<Dest>, GetterImpl<Source>>();
         for (Entry<String, JsonElement> e : schemaJson.entrySet()) {
             String field = e.getKey();
             JsonElement fieldValue = e.getValue();
 
-            GetterImpl sourceMethod = getSourceMethod(field, fieldValue);
+            GetterImpl<Source> sourceMethod = getSourceMethod(field, fieldValue);
 
             Class<?> returnType = sourceMethod.ReturnType;
 
-            SetterImpl destMethod = getDestMethod(fieldValue, returnType);
+            SetterImpl<Dest> destMethod = getDestMethod(fieldValue, returnType);
             MethodMap.put(destMethod, sourceMethod);
         }
     }
@@ -56,11 +54,11 @@ public class GenericTranslator<Source, Dest> {
     public void translate(Source source, Dest destObj)
             throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException,
             SecurityException, NoSuchFieldException, InstantiationException {
-        Set<Entry<SetterImpl, GetterImpl>> entrySet = MethodMap.entrySet();
-        for (Entry<SetterImpl, GetterImpl> entry : entrySet) {
-            SetterImpl destMethod = entry.getKey();
+        Set<Entry<SetterImpl<Dest>, GetterImpl<Source>>> entrySet = MethodMap.entrySet();
+        for (Entry<SetterImpl<Dest>, GetterImpl<Source>> entry : entrySet) {
+            SetterImpl<Dest> destMethod = entry.getKey();
 
-            GetterImpl sourceMethod = entry.getValue();
+            GetterImpl<Source> sourceMethod = entry.getValue();
             Object value = sourceMethod.getReturnValue(source);
             destMethod.setValue(destObj, value);
             // SetterImpl sim = new SetterImpl<>();
@@ -86,8 +84,7 @@ public class GenericTranslator<Source, Dest> {
         }
     }
 
-    @SuppressWarnings("deprecation")
-    private SetterImpl getDestMethod(JsonElement destDescriptor, @SuppressWarnings("rawtypes") Class typeClass)
+    private SetterImpl<Dest> getDestMethod(JsonElement destDescriptor, @SuppressWarnings("rawtypes") Class typeClass)
             throws NoSuchMethodException, SecurityException, NoSuchFieldException {
         String destMethodName;
 
@@ -108,15 +105,14 @@ public class GenericTranslator<Source, Dest> {
                 destMethodName = descriptor.get(DESTINATION_METHOD).getAsString();
             }
         }
-        SetterImpl setterImpl = new SetterImpl();
+        SetterImpl<Dest> setterImpl = new SetterImpl<Dest>();
         setterImpl.intialize(dest, destMethodName);
         // Method destMethod = dest.getMethod(destMethodName, typeClass);
         return setterImpl;
     }
 
     @SuppressWarnings("deprecation")
-    private GetterImpl getSourceMethod(String field, JsonElement value) throws NoSuchMethodException {
-        String sourceMethodName;
+    private GetterImpl<Source> getSourceMethod(String field, JsonElement value) throws NoSuchMethodException {
         String methodSuffix;
         if (value.isJsonObject()) {
             JsonElement sourceJsonElement = value.getAsJsonObject().get(SOURCE);
@@ -130,14 +126,11 @@ public class GenericTranslator<Source, Dest> {
         } else {
             methodSuffix = field;
         }
-        GetterImpl getterImpl = new GetterImpl();
+        GetterImpl<Source> getterImpl = new GetterImpl<Source>();
         getterImpl.initialize(source, methodSuffix);
         // sourceMethodName = "get" + StringUtils.capitalise(methodSuffix);
         // Method sourceMethod = source.getMethod(sourceMethodName);
         return getterImpl;
     }
-    private static String  getGetterName(String s){
-        return "get" + StringUtils.capitalise(s);
 
-    }
 }

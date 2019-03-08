@@ -3,7 +3,6 @@ package schema;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 import static schema.SConstant.separator;
 
 import org.apache.commons.lang.StringUtils;
